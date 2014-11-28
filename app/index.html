@@ -22,8 +22,67 @@
     <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
     <link rel="stylesheet" href="app.css">
     <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+
+    <script type="text/javascript">
+        console.log("Hello");
+        var CLIENT_ID = '929279558954-p46q28jrcmrgn9fhshlc0c2vh2eeh6uv.apps.googleusercontent.com';
+        var SCOPES = 'https://www.googleapis.com/auth/drive';
+
+        /**
+         * Called when the client library is loaded to start the auth flow.
+         */
+        function handleClientLoad() {
+            window.setTimeout(checkAuth, 1);
+        }
+
+        /**
+         * Check if the current user has authorized the application.
+         */
+        function checkAuth() {
+            gapi.auth.authorize(
+                    {'client_id': CLIENT_ID, 'scope': SCOPES, 'immediate': true},
+                    handleAuthResult);
+        }
+
+        /**
+         * Called when authorization server replies.
+         *
+         * @param {Object} authResult Authorization result.
+         */
+        function handleAuthResult(authResult) {
+            /*
+             var authButton = document.getElementById('authorizeButton');
+             var filePicker = document.getElementById('filePicker');
+             authButton.style.display = 'none';
+             filePicker.style.display = 'none';
+             */
+            if (authResult && !authResult.error) {
+                // Access token has been successfully retrieved, requests can be sent to the API.
+                //filePicker.style.display = 'block';
+                //filePicker.onchange = uploadFile;
+                console.log("Authentication token successfully retrieved")
+            } else {
+                console.log("Retrying authentication")
+                // No access token could be retrieved, show the button to start the authorization flow.
+                //authButton.style.display = 'block';
+                //authButton.onclick = function() {
+                gapi.auth.authorize(
+                        {'client_id': CLIENT_ID, 'scope': SCOPES, 'immediate': false},
+                        handleAuthResult);
+                //};
+            }
+        }
+    </script>
+    <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+
+    <!-- Needed for automatically downloading the FileAPI.min.js and FileAPI.flash.swf files -->
+    <script>
+        FileAPI = {
+            scriptBase: "../js/"
+        }
+    </script>
 </head>
-<body>
+<body ng-controller="AppCtrl">
 
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
@@ -40,14 +99,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="#">Accounting Manager</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#/view1">View 1</a></li>
                 <li><a href="#/view2">View 2</a></li>
                 <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="#">Welcome, {{loggedOnUser}}</a></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <input type="text" class="form-control" placeholder="Search...">
@@ -92,6 +151,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-file-upload/angular-file-upload.min.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="app.js"></script>
     <script src="view1/view1.js"></script>

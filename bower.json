@@ -12,6 +12,7 @@
     "angular-mocks": "~1.2.x",
     "html5-boilerplate": "~4.3.0",
     "bootstrap": "~3.3.0",
-    "kendo-ui-core": "~2014.2.903"
+    "kendo-ui-core": "~2014.2.903",
+    "angular-file-upload": "~1.1.5"
   }
 }
